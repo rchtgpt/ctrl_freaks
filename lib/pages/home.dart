@@ -1,3 +1,4 @@
+import 'package:ctrl_freaks/main.dart';
 import 'package:ctrl_freaks/widgets/CTACard.dart';
 import 'package:ctrl_freaks/widgets/HomeHeaderCard.dart';
 import 'package:ctrl_freaks/widgets/progressCard.dart';
@@ -20,8 +21,7 @@ class Home extends StatelessWidget {
           children: [
             Expanded(
               flex: 7,
-              child: HomeHeaderCard(),
-            ),
+              child: HomeHeaderCard(),),
             Expanded(child: Spacer(flex: 1,)),
             Expanded(
               flex: 7,
@@ -45,7 +45,7 @@ class Home extends StatelessWidget {
               child: CTACard(
                   "📸 Capture a pose",
                   "To see your muscle progress gradually, we recommend you take pictures after every workout",
-                  "TAKE PICTURE"),
+                  "TAKE PICTURE", MyApp.id1),
             ),
             Expanded(child: Spacer(flex: 1,)),
             Expanded(
@@ -53,7 +53,7 @@ class Home extends StatelessWidget {
               child: CTACard(
                   "👀 View your progress",
                   "To see your muscle progress gradually, we recommend you take pictures after every workout",
-                  "VIEW PROGRESS"),
+                  "VIEW PROGRESS", MyApp.id2),
             ),
           ],
         ),

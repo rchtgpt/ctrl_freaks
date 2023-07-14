@@ -9,7 +9,10 @@ void main() {
     debugShowCheckedModeBanner: false,
     initialRoute: MyApp.id,
     routes: {
-      MyApp.id: (context) => MyHomePage(title: "hi"),
+      MyApp.id: (context) => MyHomePage(title: "hi", currentIndex: 0,),
+      MyApp.id1: (context) => MyHomePage(title: "hi", currentIndex: 1,),
+      MyApp.id2: (context) => MyHomePage(title: "hi", currentIndex: 2,),
+      MyApp.id3: (context) => MyHomePage(title: "hi", currentIndex: 3,),
       Home.id: (context) => Home(),
       Capture.id: (context) => Capture(),
       Progress.id: (context) => Progress(),
@@ -20,11 +23,14 @@ void main() {
 
 class MyApp extends StatelessWidget {
   static const id = "my_app";
+  static const id1 = "my_app1";
+  static const id2 = "my_app2";
+  static const id3 = "my_app3";
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(title: 'Control Freaks'),
+      home: MyHomePage(title: 'Control Freaks', currentIndex: 0),
       title: 'Ctrl Freaks',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -35,15 +41,15 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title, required this.currentIndex}) : super(key: key);
   final String title;
+  int currentIndex = 0;
   
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _currentIndex = 0;
   final screens = [Home(), Capture(), Progress(), Settings()];
 
 
@@ -59,9 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
           unselectedItemColor: Colors.grey.withOpacity(.90),
           selectedFontSize: 14,
           unselectedFontSize: 14,
-          currentIndex: _currentIndex,
+          currentIndex: widget.currentIndex,
           onTap: (value) {
-            setState(() => _currentIndex = value);
+            setState(() => widget.currentIndex = value);
           },
           items: [
             BottomNavigationBarItem(
@@ -83,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: screens[_currentIndex],// This trailing comma makes auto-formatting nicer for build methods.
+      body: screens[widget.currentIndex],// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
