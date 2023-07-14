@@ -50,6 +50,7 @@ flutter:
   assets:
     - static/images/flex.jpg
     - static/images/flex-2.jpg
+    - static/images/fitness.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
