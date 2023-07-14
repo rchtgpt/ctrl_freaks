@@ -6,10 +6,7 @@ class Progress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        theme: ThemeData(fontFamily: "Inter"),
-        home: Scaffold(
-            appBar: AppBar(title: const Text("Fitness app")),
+        return Scaffold(
             body: Column(
               children: [
                 Container(
@@ -75,8 +72,7 @@ class Progress extends StatelessWidget {
                 const BottomSlider()
               ],
             )
-        )
-    );
+        );
   }
 }
 
