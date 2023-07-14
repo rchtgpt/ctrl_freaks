@@ -1,3 +1,4 @@
+import 'package:ctrl_freaks/widgets/CTACard.dart';
 import 'package:ctrl_freaks/widgets/HomeHeaderCard.dart';
 import 'package:ctrl_freaks/widgets/progressCard.dart';
 import 'package:flutter/material.dart';
@@ -41,49 +42,26 @@ class Home extends StatelessWidget {
             Expanded(child: Spacer(flex: 1,)),
             Expanded(
               flex: 8,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14.0),
-                  side: BorderSide(
-                    color: Colors.black,
-                    width: 1,
-                  )
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("📸 Capture a pose",
-                      style: TextStyle(
-                          fontSize: 22,
-                      fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    Text("To see your muscle progress gradually, we recommend you take pictures after every workout"),
-                    FilledButton(
-                      onPressed: () {},
-                      child: Row(
-                        children: [
-                          const Text('Take Picture'),
-                          Icon(Icons.arrow_right_alt_sharp)
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              child: CTACard(
+                  "📸 Capture a pose",
+                  "To see your muscle progress gradually, we recommend you take pictures after every workout",
+                  "TAKE PICTURE"),
             ),
             Expanded(child: Spacer(flex: 1,)),
             Expanded(
               flex: 8,
-              child: Card(
-                child: Center(child: Text('Elevated Card')),
-              ),
+              child: CTACard(
+                  "👀 View your progress",
+                  "To see your muscle progress gradually, we recommend you take pictures after every workout",
+                  "VIEW PROGRESS"),
             ),
           ],
         ),
       ),
     );
   }
+
+
 
 
 }
