@@ -1,10 +1,16 @@
+import 'package:intl/intl.dart';
 import "package:flutter/material.dart";
 import 'package:carousel_slider/carousel_slider.dart';
 
-class Progress extends StatelessWidget {
+class Progress extends StatefulWidget {
   const Progress({Key? key}) : super(key: key);
   static const String id = "progress";
 
+  @override
+  State<Progress> createState() => _ProgressState();
+}
+
+class _ProgressState extends State<Progress> {
   @override
   Widget build(BuildContext context) {
         return Scaffold(
@@ -120,18 +126,17 @@ class BottomSlider extends StatefulWidget {
 
 class _BottomSliderState extends State<BottomSlider> {
 
-  double _currentValue = 50;
+  double _currentValue = 0;
   String cimg = "flex";
-  List<String> imgs = ["flex", "flex-2", "flex", "flex-2"];
+  List<String> imgs = ["flex-2", "flex-2", "flex-2", "flex-2", "flex-2", "flex-2", "flex-2", "flex-2", "flex-2", "flex-2"];
+  List dates = [DateTime(2023, 01, 01), DateTime(2023, 01, 22), DateTime(2023, 04, 11), DateTime(2023, 06, 17), DateTime(2023, 06, 17), DateTime(2023, 06, 17), DateTime(2023, 06, 17), DateTime(2023, 06, 17), DateTime(2023, 06, 17), DateTime(2023, 06, 17)];
 
   CarouselController controller = CarouselController();
 
+  String formatDate(DateTime date) => new DateFormat("MMMM d").format(date);
+
   void changeImg(value) {
-    if (value > _currentValue) {
-      controller.nextPage();
-    } else if (value < _currentValue) {
-      controller.previousPage();
-    }
+    controller.animateToPage(value.toInt());
     setState(() {
       _currentValue = value;
     });
@@ -148,7 +153,8 @@ class _BottomSliderState extends State<BottomSlider> {
                 height: 300.0,
                 viewportFraction: 0.5,
                 enableInfiniteScroll: false,
-                enlargeCenterPage: true
+                enlargeCenterPage: true,
+                initialPage: 0
             ),
             carouselController: controller,
             items: imgs.map((i) {
@@ -172,9 +178,9 @@ class _BottomSliderState extends State<BottomSlider> {
             activeColor: Color(0xffFEC20B),
             inactiveColor: Color(0xffFEC20B),
             value: _currentValue,
-            max: 100,
-            divisions: imgs.length,
-            label: _currentValue.toString(),
+            max: imgs.length.toDouble() - 1,
+            divisions: imgs.length - 1,
+            label: formatDate(dates[_currentValue.toInt()]),
             onChanged: (double value) => changeImg(value)
           ),
         ),
