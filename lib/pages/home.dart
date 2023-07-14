@@ -44,7 +44,7 @@ class Home extends StatelessWidget {
               flex: 8,
               child: CTACard(
                   "📸 Capture a pose",
-                  "To see your muscle progress gradually, we recommend you take pictures after every workout",
+                  "To see your muscle progress, we recommend you take pictures after every workout",
                   "CAPTURE IMAGE", MyApp.id1),
             ),
             Expanded(child: Spacer(flex: 1,)),
@@ -52,7 +52,7 @@ class Home extends StatelessWidget {
               flex: 8,
               child: CTACard(
                   "👀 View your progress",
-                  "To see your muscle progress gradually, we recommend you take pictures after every workout",
+                  "To see your muscle progress, we recommend you take pictures after every workout",
                   "VIEW PROGRESS", MyApp.id2),
             ),
           ],
