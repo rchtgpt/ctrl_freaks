@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(
+    theme: ThemeData(fontFamily: "Inter"),
     debugShowCheckedModeBanner: false,
     initialRoute: MyApp.id,
     routes: {
