@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:carousel_slider/carousel_slider.dart';
 
 class Progress extends StatelessWidget {
   const Progress({Key? key}) : super(key: key);
@@ -57,16 +58,6 @@ class Progress extends StatelessWidget {
                   child: const Text(
                     "👀 Look at that Bicep Growth",
                     style: TextStyle(fontSize: 17),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: const Image(
-                        image: AssetImage('static/images/flex-2.jpg'),
-                        height: 300.0
-                    ),
                   ),
                 ),
                 const BottomSlider()
@@ -129,25 +120,65 @@ class BottomSlider extends StatefulWidget {
 
 class _BottomSliderState extends State<BottomSlider> {
 
-  double _currentValue = 60;
+  double _currentValue = 50;
+  String cimg = "flex";
+  List<String> imgs = ["flex", "flex-2", "flex", "flex-2"];
+
+  CarouselController controller = CarouselController();
+
+  void changeImg(value) {
+    if (value > _currentValue) {
+      controller.nextPage();
+    } else if (value < _currentValue) {
+      controller.previousPage();
+    }
+    setState(() {
+      _currentValue = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 30.0, left: 50.0, right: 50.0),
-      child: Slider(
-        activeColor: Color(0xffFEC20B),
-        inactiveColor: Color(0xffFEC20B),
-        value: _currentValue,
-        max: 100,
-        divisions: 100,
-        label: _currentValue.toString(),
-        onChanged: (double value) {
-          setState(() {
-            _currentValue = value;
-          });
-        },
-      ),
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 10.0),
+          child: CarouselSlider(
+            options: CarouselOptions(
+                height: 300.0,
+                viewportFraction: 0.5,
+                enableInfiniteScroll: false,
+                enlargeCenterPage: true
+            ),
+            carouselController: controller,
+            items: imgs.map((i) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image(
+                      image: AssetImage('static/images/$i.jpg'),
+                      height: 300.0
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 30.0, left: 50.0, right: 50.0),
+          child: Slider(
+            activeColor: Color(0xffFEC20B),
+            inactiveColor: Color(0xffFEC20B),
+            value: _currentValue,
+            max: 100,
+            divisions: imgs.length,
+            label: _currentValue.toString(),
+            onChanged: (double value) => changeImg(value)
+          ),
+        ),
+      ],
     );
   }
 }
