@@ -65,16 +65,16 @@ class MuscleBtn extends StatefulWidget {
 
 class _MuscleBtnState extends State<MuscleBtn> {
 
-  static var bgColor = Colors.yellow;
+  static Color bgColor = Color(0xffFFDC73);
   static bool pressed = false;
 
   void selectBtn() {
     setState(() {
       pressed = !pressed;
       if (pressed) {
-        bgColor = Colors.amber;
+        bgColor = Color(0xffFEC20B);
       } else {
-        bgColor = Colors.yellow;
+        bgColor = Color(0xffFFDC73);
       }
     });
   }
@@ -82,10 +82,12 @@ class _MuscleBtnState extends State<MuscleBtn> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 5.0),
+      margin: const EdgeInsets.only(right: 10.0),
       child: OutlinedButton(
           style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.black, backgroundColor: bgColor
+              foregroundColor: Colors.black, backgroundColor: bgColor,
+              padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
+              minimumSize: Size.zero
           ),
           onPressed: selectBtn,
           child: Text(
@@ -110,16 +112,21 @@ class _BottomSliderState extends State<BottomSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Slider(
-      value: _currentValue,
-      max: 100,
-      divisions: 100,
-      label: _currentValue.toString(),
-      onChanged: (double value) {
-        setState(() {
-          _currentValue = value;
-        });
-      },
+    return Container(
+      margin: EdgeInsets.only(top: 30.0, left: 50.0, right: 50.0),
+      child: Slider(
+        activeColor: Color(0xffFEC20B),
+        inactiveColor: Color(0xffFEC20B),
+        value: _currentValue,
+        max: 100,
+        divisions: 100,
+        label: _currentValue.toString(),
+        onChanged: (double value) {
+          setState(() {
+            _currentValue = value;
+          });
+        },
+      ),
     );
   }
 }
