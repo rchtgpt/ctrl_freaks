@@ -29,6 +29,31 @@ class Progress extends StatelessWidget {
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 36.0),
+                  child: Row(
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {},
+                          child: Text(
+                              "📽️ Export Transformation Reel",
+                              style: TextStyle(color: Color(0xff000000)),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xffffffff),
+                            side: BorderSide(
+                              width: 2.0,
+                              color: Color(0xff000000),
+                            ),
+                            elevation: 7.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0)
+                              )
+                          ),
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   width: double.infinity,
                   margin: const EdgeInsets.only(top: 51.0, left: 36.0),
