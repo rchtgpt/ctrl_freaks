@@ -2,6 +2,7 @@ import 'package:ctrl_freaks/pages/capture.dart';
 import 'package:ctrl_freaks/pages/home.dart';
 import 'package:ctrl_freaks/pages/progress.dart';
 import 'package:ctrl_freaks/pages/settings.dart';
+import 'package:ctrl_freaks/pages/test.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +18,8 @@ void main() {
       Home.id: (context) => Home(),
       Capture.id: (context) => Capture(),
       Progress.id: (context) => Progress(),
-      Settings.id: (context) => Settings()
+      Settings.id: (context) => Settings(),
+      Test.id: (context) => Test(null)
     },
   ));
 }
