@@ -64,10 +64,10 @@ class _CaptureState extends State<Capture> {
         inputImage.metadata!.rotation,
         _cameraLensDirection,
       );
-      print("ughhlol ${inputImage} ${inputImage.metadata} ${inputImage.metadata?.size} ${inputImage.metadata?.rotation} ${_cameraLensDirection}");
+      // print("ughhlol ${inputImage} ${inputImage.metadata} ${inputImage.metadata?.size} ${inputImage.metadata?.rotation} ${_cameraLensDirection}");
       _customPaint = CustomPaint(painter: painter);
     } else {
-      print("ughhh ${inputImage} ${inputImage.metadata} ${inputImage.metadata?.size} ${inputImage.metadata?.rotation} ${_cameraLensDirection}");
+      // print("ughhh ${inputImage} ${inputImage.metadata} ${inputImage.metadata?.size} ${inputImage.metadata?.rotation} ${_cameraLensDirection}");
       _text = 'Poses found: ${poses.length}\n\n';
       // TODO: set _customPaint to draw landmarks on top of image
       final painter = PosePainter(poses, Size(1280.0, 720.0), InputImageRotation.rotation270deg, _cameraLensDirection);

@@ -1,9 +1,14 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../pages/test.dart';
 
 class CameraView extends StatefulWidget {
   CameraView(
@@ -73,31 +78,142 @@ class _CameraViewState extends State<CameraView> {
   }
 
   Widget _liveFeedBody() {
+
+    var scr = new GlobalKey();
+
+    // print("thepng $pngBytes");
+
     if (_cameras.isEmpty) return Container();
     if (_controller == null) return Container();
     if (_controller?.value.isInitialized == false) return Container();
-    return Container(
-      color: Colors.black,
-      child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Center(
-            child: _changingCameraLens
-                ? Center(
-              child: const Text('Changing camera lens'),
-            )
-                : CameraPreview(
-              _controller!,
-              child: widget.customPaint,
-            ),
-          ),
-          _backButton(),
-          _switchLiveCameraToggle(),
-          _detectionViewModeToggle(),
-          _zoomControl(),
-          _exposureControl(),
-        ],
-      ),
+
+    // return Builder(
+    //   builder: (context) {
+    //     return RepaintBoundary(
+    //       key: scr,
+    //       child: Container(
+    //         color: Colors.black,
+    //         child: Stack(
+    //           fit: StackFit.expand,
+    //           children: <Widget>[
+    //             Center(
+    //               child: _changingCameraLens
+    //                   ? Center(
+    //                 child: const Text('Changing camera lens'),
+    //               )
+    //                   : CameraPreview(
+    //                 _controller!,
+    //                 child: widget.customPaint,
+    //               ),
+    //             ),
+    //             // _backButton(),
+    //             Positioned(
+    //               bottom: 8,
+    //               right: 8,
+    //               child: SizedBox(
+    //                 height: 50.0,
+    //                 width: 50.0,
+    //                 child: FloatingActionButton(
+    //                   backgroundColor: Colors.black54,
+    //                   child: Icon(
+    //                     Icons.screenshot,
+    //                     size: 20,
+    //                   ),
+    //                   heroTag: Object(),
+    //                   onPressed: () async {
+    //                     print("coming here");
+    //                     RenderRepaintBoundary boundary = scr.currentContext?.findRenderObject() as RenderRepaintBoundary;
+    //                     ui.Image image = await boundary.toImage();
+    //                     final directory = (await getApplicationDocumentsDirectory()).path;
+    //                     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    //                     Uint8List? pngBytes = byteData?.buffer.asUint8List();
+    //                     Navigator.push(context, MaterialPageRoute(builder: (context) => Test(pngBytes)));
+    //                     File imgFile =new File('$directory/${DateTime.now()}.png');
+    //                     print("imgFile $imgFile");
+    //                     imgFile.writeAsBytes(pngBytes as List<int>);
+    //                     // RenderRepaintBoundary boundary = scr.currentContext?.findRenderObject() as RenderRepaintBoundary;
+    //                     // print("boundary $boundary");
+    //                     // var image = await boundary.toImage();
+    //                     // print("image $image");
+    //                     // var byteData = await image.toByteData(format: ImageByteFormat.png);
+    //                     // setState(() {
+    //                     //   pngBytes = byteData?.buffer.asUint8List();
+    //                     // });
+    //                     // print("pngBytes $pngBytes");
+    //                     // Image.memory(pngBytes!);
+    //                   },
+    //                 ),
+    //               ),
+    //             ),
+    //             _switchLiveCameraToggle(),
+    //             // _detectionViewModeToggle(),
+    //             // _zoomControl(),
+    //             // _exposureControl(),
+    //           ],
+    //         ),
+    //       ),
+    //     );
+    //   }
+    // );
+    return Builder(
+        builder: (context) {
+          return Container(
+              color: Colors.black,
+              child: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  Center(
+                    child: _changingCameraLens
+                        ? Center(
+                      child: const Text('Changing camera lens'),
+                    )
+                        : RepaintBoundary(
+                      key: scr,
+                          child: CameraPreview(
+                      _controller!,
+                      child: widget.customPaint,
+                    ),
+                        ),
+                  ),
+                  // _backButton(),
+                  _switchLiveCameraToggle(),
+                  Positioned(
+                    bottom: 8,
+                    left: 8,
+                    child: SizedBox(
+                      height: 50.0,
+                      width: 50.0,
+                      child: FloatingActionButton(
+                          backgroundColor: Colors.black54,
+                          child: Icon(
+                            Icons.screenshot,
+                            size: 20,
+                          ),
+                          heroTag: Object(),
+                          onPressed: () async {
+                            print("coming here");
+                            // print("scr $scr");
+                            // print("scr context ${scr.currentContext}");
+                            RenderRepaintBoundary boundary = scr.currentContext?.findRenderObject() as RenderRepaintBoundary;
+                            ui.Image image = await boundary.toImage();
+                            final directory = (await getApplicationDocumentsDirectory()).path;
+                            ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+                            Uint8List? pngBytes = byteData?.buffer.asUint8List();
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Test(pngBytes)));
+                            File imgFile =new File('$directory/${DateTime.now()}.png');
+                            print("imgFile $imgFile");
+                            imgFile.writeAsBytes(pngBytes as List<int>);
+                          }
+                      ),
+                    ),
+                  ),
+                  // _detectionViewModeToggle(),
+                  // _zoomControl(),
+                  // _exposureControl(),
+                ],
+              ),
+            );
+        }
     );
   }
 
