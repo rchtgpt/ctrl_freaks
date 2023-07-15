@@ -81,80 +81,10 @@ class _CameraViewState extends State<CameraView> {
 
     var scr = new GlobalKey();
 
-    // print("thepng $pngBytes");
-
     if (_cameras.isEmpty) return Container();
     if (_controller == null) return Container();
     if (_controller?.value.isInitialized == false) return Container();
 
-    // return Builder(
-    //   builder: (context) {
-    //     return RepaintBoundary(
-    //       key: scr,
-    //       child: Container(
-    //         color: Colors.black,
-    //         child: Stack(
-    //           fit: StackFit.expand,
-    //           children: <Widget>[
-    //             Center(
-    //               child: _changingCameraLens
-    //                   ? Center(
-    //                 child: const Text('Changing camera lens'),
-    //               )
-    //                   : CameraPreview(
-    //                 _controller!,
-    //                 child: widget.customPaint,
-    //               ),
-    //             ),
-    //             // _backButton(),
-    //             Positioned(
-    //               bottom: 8,
-    //               right: 8,
-    //               child: SizedBox(
-    //                 height: 50.0,
-    //                 width: 50.0,
-    //                 child: FloatingActionButton(
-    //                   backgroundColor: Colors.black54,
-    //                   child: Icon(
-    //                     Icons.screenshot,
-    //                     size: 20,
-    //                   ),
-    //                   heroTag: Object(),
-    //                   onPressed: () async {
-    //                     print("coming here");
-    //                     RenderRepaintBoundary boundary = scr.currentContext?.findRenderObject() as RenderRepaintBoundary;
-    //                     ui.Image image = await boundary.toImage();
-    //                     final directory = (await getApplicationDocumentsDirectory()).path;
-    //                     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    //                     Uint8List? pngBytes = byteData?.buffer.asUint8List();
-    //                     Navigator.push(context, MaterialPageRoute(builder: (context) => Test(pngBytes)));
-    //                     File imgFile =new File('$directory/${DateTime.now()}.png');
-    //                     print("imgFile $imgFile");
-    //                     imgFile.writeAsBytes(pngBytes as List<int>);
-    //                     // RenderRepaintBoundary boundary = scr.currentContext?.findRenderObject() as RenderRepaintBoundary;
-    //                     // print("boundary $boundary");
-    //                     // var image = await boundary.toImage();
-    //                     // print("image $image");
-    //                     // var byteData = await image.toByteData(format: ImageByteFormat.png);
-    //                     // setState(() {
-    //                     //   pngBytes = byteData?.buffer.asUint8List();
-    //                     // });
-    //                     // print("pngBytes $pngBytes");
-    //                     // Image.memory(pngBytes!);
-    //                   },
-    //                 ),
-    //               ),
-    //             ),
-    //             _switchLiveCameraToggle(),
-    //             // _detectionViewModeToggle(),
-    //             // _zoomControl(),
-    //             // _exposureControl(),
-    //           ],
-    //         ),
-    //       ),
-    //     );
-    //   }
-    // );
     return Builder(
         builder: (context) {
           return Container(
@@ -175,7 +105,6 @@ class _CameraViewState extends State<CameraView> {
                     ),
                         ),
                   ),
-                  // _backButton(),
                   _switchLiveCameraToggle(),
                   Positioned(
                     bottom: 8,
@@ -191,9 +120,6 @@ class _CameraViewState extends State<CameraView> {
                           ),
                           heroTag: Object(),
                           onPressed: () async {
-                            print("coming here");
-                            // print("scr $scr");
-                            // print("scr context ${scr.currentContext}");
                             RenderRepaintBoundary boundary = scr.currentContext?.findRenderObject() as RenderRepaintBoundary;
                             ui.Image image = await boundary.toImage();
                             final directory = (await getApplicationDocumentsDirectory()).path;
@@ -201,57 +127,18 @@ class _CameraViewState extends State<CameraView> {
                             Uint8List? pngBytes = byteData?.buffer.asUint8List();
                             Navigator.push(context, MaterialPageRoute(builder: (context) => Test(pngBytes)));
                             File imgFile =new File('$directory/${DateTime.now()}.png');
-                            print("imgFile $imgFile");
                             imgFile.writeAsBytes(pngBytes as List<int>);
                           }
                       ),
                     ),
                   ),
-                  // _detectionViewModeToggle(),
                   // _zoomControl(),
-                  // _exposureControl(),
                 ],
               ),
             );
         }
     );
   }
-
-  Widget _backButton() => Positioned(
-    top: 40,
-    left: 8,
-    child: SizedBox(
-      height: 50.0,
-      width: 50.0,
-      child: FloatingActionButton(
-        heroTag: Object(),
-        onPressed: () => Navigator.of(context).pop(),
-        backgroundColor: Colors.black54,
-        child: Icon(
-          Icons.arrow_back_ios_outlined,
-          size: 20,
-        ),
-      ),
-    ),
-  );
-
-  Widget _detectionViewModeToggle() => Positioned(
-    bottom: 8,
-    left: 8,
-    child: SizedBox(
-      height: 50.0,
-      width: 50.0,
-      child: FloatingActionButton(
-        heroTag: Object(),
-        onPressed: widget.onDetectorViewModeChanged,
-        backgroundColor: Colors.black54,
-        child: Icon(
-          Icons.photo_library_outlined,
-          size: 25,
-        ),
-      ),
-    ),
-  );
 
   Widget _switchLiveCameraToggle() => Positioned(
     bottom: 8,
@@ -319,55 +206,6 @@ class _CameraViewState extends State<CameraView> {
           ],
         ),
       ),
-    ),
-  );
-
-  Widget _exposureControl() => Positioned(
-    top: 40,
-    right: 8,
-    child: ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: 250,
-      ),
-      child: Column(children: [
-        Container(
-          width: 55,
-          decoration: BoxDecoration(
-            color: Colors.black54,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Text(
-                '${_currentExposureOffset.toStringAsFixed(1)}x',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: RotatedBox(
-            quarterTurns: 3,
-            child: SizedBox(
-              height: 30,
-              child: Slider(
-                value: _currentExposureOffset,
-                min: _minAvailableExposureOffset,
-                max: _maxAvailableExposureOffset,
-                activeColor: Colors.white,
-                inactiveColor: Colors.white30,
-                onChanged: (value) async {
-                  setState(() {
-                    _currentExposureOffset = value;
-                  });
-                  await _controller?.setExposureOffset(value);
-                },
-              ),
-            ),
-          ),
-        )
-      ]),
     ),
   );
 
@@ -442,15 +280,9 @@ class _CameraViewState extends State<CameraView> {
 
   InputImage? _inputImageFromCameraImage(CameraImage image) {
     if (_controller == null) return null;
-
-    // get image rotation
-    // it is used in android to convert the InputImage from Dart to Java: https://github.com/flutter-ml/google_ml_kit_flutter/blob/master/packages/google_mlkit_commons/android/src/main/java/com/google_mlkit_commons/InputImageConverter.java
-    // `rotation` is not used in iOS to convert the InputImage from Dart to Obj-C: https://github.com/flutter-ml/google_ml_kit_flutter/blob/master/packages/google_mlkit_commons/ios/Classes/MLKVisionImage%2BFlutterPlugin.m
-    // in both platforms `rotation` and `camera.lensDirection` can be used to compensate `x` and `y` coordinates on a canvas: https://github.com/flutter-ml/google_ml_kit_flutter/blob/master/packages/example/lib/vision_detector_views/painters/coordinates_translator.dart
     final camera = _cameras[_cameraIndex];
     final sensorOrientation = camera.sensorOrientation;
-    // print(
-    //     'lensDirection: ${camera.lensDirection}, sensorOrientation: $sensorOrientation, ${_controller?.value.deviceOrientation} ${_controller?.value.lockedCaptureOrientation} ${_controller?.value.isCaptureOrientationLocked}');
+
     InputImageRotation? rotation;
     if (Platform.isIOS) {
       rotation = InputImageRotationValue.fromRawValue(sensorOrientation);
@@ -467,17 +299,11 @@ class _CameraViewState extends State<CameraView> {
             (sensorOrientation - rotationCompensation + 360) % 360;
       }
       rotation = InputImageRotationValue.fromRawValue(rotationCompensation);
-      // print('rotationCompensation: $rotationCompensation');
     }
     if (rotation == null) return null;
-    // print('final rotation: $rotation');
 
     // get image format
     final format = InputImageFormatValue.fromRawValue(image.format.raw);
-    // validate format depending on platform
-    // only supported formats:
-    // * nv21 for Android
-    // * bgra8888 for iOS
     if (format == null ||
         (Platform.isAndroid && format != InputImageFormat.nv21) ||
         (Platform.isIOS && format != InputImageFormat.bgra8888)) return null;
