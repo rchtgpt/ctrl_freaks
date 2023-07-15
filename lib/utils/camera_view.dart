@@ -2,12 +2,15 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import '../firebase_options.dart';
 import '../pages/test.dart';
 
 class CameraView extends StatefulWidget {
@@ -120,14 +123,37 @@ class _CameraViewState extends State<CameraView> {
                           ),
                           heroTag: Object(),
                           onPressed: () async {
+                            await Firebase.initializeApp(
+                              options: DefaultFirebaseOptions.currentPlatform,
+                            );
                             RenderRepaintBoundary boundary = scr.currentContext?.findRenderObject() as RenderRepaintBoundary;
                             ui.Image image = await boundary.toImage();
                             final directory = (await getApplicationDocumentsDirectory()).path;
                             ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
                             Uint8List? pngBytes = byteData?.buffer.asUint8List();
                             Navigator.push(context, MaterialPageRoute(builder: (context) => Test(pngBytes)));
-                            File imgFile =new File('$directory/${DateTime.now()}.png');
-                            imgFile.writeAsBytes(pngBytes as List<int>);
+                            File file =new File('$directory/${DateTime.now()}.png');
+                            file.writeAsBytes(pngBytes as List<int>);
+                            print('hi ${file.path}');
+
+                            if (file == null) return;
+
+                            // Generate a unique file name for the file
+                            String uniqueFileName = DateTime.now().toString();
+
+                            // upload to firebase storage
+                            Reference referenceRoot = FirebaseStorage.instance.ref();
+                            Reference referenceDirImages = referenceRoot.child('images');
+
+                            // creating a reference of images to be stored
+                            Reference referenceImageToUpload = referenceDirImages.child(uniqueFileName);
+
+                            // storing the file
+                            try {
+                              await referenceImageToUpload.putFile(File(file.path));
+                            } catch(error) {
+                              print("Error uploading image to Firebase");
+                            }
                           }
                       ),
                     ),

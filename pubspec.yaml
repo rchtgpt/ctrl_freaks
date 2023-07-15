@@ -36,6 +36,7 @@ dependencies:
   google_mlkit_pose_detection: ^0.8.0
   camera: ^0.10.5+2
   image_picker: ^1.0.1
+  firebase_storage: ^11.2.5
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +57,7 @@ flutter:
   assets:
     - static/images/flex.jpg
     - static/images/flex-2.jpg
+    - static/images/flex-3.jpg
     - static/images/fitness.png
   #   - images/a_dot_ham.jpeg
 
