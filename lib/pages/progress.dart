@@ -1,3 +1,7 @@
+import 'package:ctrl_freaks/widgets/muscleBtn.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:ctrl_freaks/firebase_options.dart';
 import 'package:intl/intl.dart';
 import "package:flutter/material.dart";
 import 'package:carousel_slider/carousel_slider.dart';
@@ -11,6 +15,58 @@ class Progress extends StatefulWidget {
 }
 
 class _ProgressState extends State<Progress> {
+  List imgs = [];
+  List dates = [];
+
+  @override
+  void initState() {
+    buildListOfImageURLs().then((result){
+      setState(() => imgs.add(result));
+      });
+    buildListOfImageDates().then((result){
+      setState(() => dates.add(result));
+    });
+  }
+
+  Future<List> buildListOfImageURLs() async {
+    List<String> imageURLs = <String>[];
+
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    final storageRef = FirebaseStorage.instance.ref().child("images/");
+    final listResult = await storageRef.listAll();
+
+    for (var item in listResult.items) {
+      var url = await item.getDownloadURL();
+      imageURLs.add(url);
+    }
+
+    print(imageURLs);
+    return imageURLs;
+  }
+
+  Future<List> buildListOfImageDates() async {
+    List<String> imageDates = <String>[];
+
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    final storageRef = FirebaseStorage.instance.ref().child("images/");
+    final listResult = await storageRef.listAll();
+
+    for (var item in listResult.items) {
+      var date = await item.name;
+      imageDates.add(date);
+    }
+
+    print("mihir bhai $imageDates");
+
+    return imageDates;
+  }
+
   @override
   Widget build(BuildContext context) {
         return Scaffold(
@@ -24,12 +80,14 @@ class _ProgressState extends State<Progress> {
                     style: TextStyle(fontSize: 24),
                   ),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: 36.0, top: 12.0),
                   child: Row(
                     children: [
-                      MuscleBtn("Back"),
-                      MuscleBtn("Biceps")
+                      muscleBtn(context, "Back"),
+                      muscleBtn(context, "Biceps"),
+                      muscleBtn(context, "Chest"),
+                      muscleBtn(context, "Triceps"),
                     ],
                   ),
                 ),
@@ -66,59 +124,18 @@ class _ProgressState extends State<Progress> {
                     style: TextStyle(fontSize: 17),
                   ),
                 ),
-                const BottomSlider()
+                BottomSlider(imgs, dates)
               ],
             )
         );
   }
 }
 
-class MuscleBtn extends StatefulWidget {
-  final String muscle;
-  const MuscleBtn(this.muscle);
-
-  @override
-  _MuscleBtnState createState() => _MuscleBtnState();
-}
-
-class _MuscleBtnState extends State<MuscleBtn> {
-
-  static Color bgColor = Color(0xffFFDC73);
-  static bool pressed = false;
-
-  void selectBtn() {
-    setState(() {
-      pressed = !pressed;
-      if (pressed) {
-        bgColor = Color(0xffFEC20B);
-      } else {
-        bgColor = Color(0xffFFDC73);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 10.0),
-      child: OutlinedButton(
-          style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.black, backgroundColor: bgColor,
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
-              minimumSize: Size.zero
-          ),
-          onPressed: selectBtn,
-          child: Text(
-            widget.muscle,
-            style: const TextStyle(fontSize: 15, fontFamily: "Inter"),
-          )
-      ),
-    );
-  }
-}
-
 class BottomSlider extends StatefulWidget {
-  const BottomSlider({Key? key}) : super(key: key);
+  final List imgs;
+  final List dates;
+  BottomSlider(this.imgs, this.dates);
+
 
   @override
   _BottomSliderState createState() => _BottomSliderState();
@@ -127,13 +144,10 @@ class BottomSlider extends StatefulWidget {
 class _BottomSliderState extends State<BottomSlider> {
 
   double _currentValue = 0;
-  String cimg = "flex";
-  List<String> imgs = ["flex-2", "flex-2", "flex-2", "flex-2", "flex-2", "flex-2", "flex-2", "flex-2", "flex-2", "flex-2"];
-  List dates = [DateTime(2023, 01, 01), DateTime(2023, 01, 22), DateTime(2023, 04, 11), DateTime(2023, 06, 17), DateTime(2023, 06, 17), DateTime(2023, 06, 17), DateTime(2023, 06, 17), DateTime(2023, 06, 17), DateTime(2023, 06, 17), DateTime(2023, 06, 17)];
 
   CarouselController controller = CarouselController();
 
-  String formatDate(DateTime date) => new DateFormat("MMMM d").format(date);
+  String formatDate(String date) => new DateFormat("MMMM d").format(DateTime.parse(date));
 
   void changeImg(value) {
     controller.animateToPage(value.toInt());
@@ -141,6 +155,7 @@ class _BottomSliderState extends State<BottomSlider> {
       _currentValue = value;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -157,15 +172,20 @@ class _BottomSliderState extends State<BottomSlider> {
                 initialPage: 0
             ),
             carouselController: controller,
-            items: imgs.map((i) {
+            items: widget.imgs[0].map<Widget>((i) {
               return Builder(
                 builder: (BuildContext context) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
+                  print("${widget.dates}+++++ $i");
+                  return Card(
+                    semanticContainer: true,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Image(
-                      image: AssetImage('static/images/$i.jpg'),
-                      height: 300.0
+                      image: NetworkImage(i),
                     ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.0),
+                    ),
+                    elevation: 5,
                   );
                 },
               );
@@ -178,9 +198,9 @@ class _BottomSliderState extends State<BottomSlider> {
             activeColor: Color(0xffFEC20B),
             inactiveColor: Color(0xffFEC20B),
             value: _currentValue,
-            max: imgs.length.toDouble() - 1,
-            divisions: imgs.length - 1,
-            label: formatDate(dates[_currentValue.toInt()]),
+            max: widget.imgs[0].length.toDouble(),
+            divisions: widget.imgs[0].length - 1,
+            label: formatDate(widget.dates[0][_currentValue.toInt()]),
             onChanged: (double value) => changeImg(value)
           ),
         ),
