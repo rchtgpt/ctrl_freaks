@@ -39,8 +39,8 @@ class _DetectorViewState extends State<DetectorView> {
 
   @override
   void initState() {
-    _mode = widget.detectionMode;
     super.initState();
+    _mode = widget.detectionMode;
   }
 
   @override

@@ -18,7 +18,7 @@ Widget HomeHeaderCard() {
                 padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
                 child: Text("Control your body.\nBe a ctrl_freak.",
                   style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold
+                      fontSize: 16, fontWeight: FontWeight.bold
                   ),),
               ),
             ],

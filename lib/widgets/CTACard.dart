@@ -13,7 +13,7 @@ Widget CTACard(String CTATitle, String CTADescription, String CTAButtonLabel, St
             )
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,7 +27,7 @@ Widget CTACard(String CTATitle, String CTADescription, String CTAButtonLabel, St
               Text(CTADescription,
                 style: TextStyle(fontSize: 14),),
               SizedBox(
-                width: 160,
+                width: 165,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, CTADestination);

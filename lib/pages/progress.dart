@@ -20,6 +20,7 @@ class _ProgressState extends State<Progress> {
 
   @override
   void initState() {
+    super.initState();
     imgs = buildListOfImageURLs();
     dates = buildListOfImageDates();
   }
@@ -161,11 +162,11 @@ class _BottomSliderState extends State<BottomSlider> {
           return Column(
             children: [
               Container(
-                margin: const EdgeInsets.only(top: 10.0),
+                margin: const EdgeInsets.only(top: 20.0),
                 child: CarouselSlider(
                   options: CarouselOptions(
-                      height: 300.0,
-                      viewportFraction: 0.5,
+                      height: 400.0,
+                      viewportFraction: 0.7,
                       enableInfiniteScroll: false,
                       enlargeCenterPage: true,
                       initialPage: 0
