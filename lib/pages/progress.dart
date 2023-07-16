@@ -147,7 +147,7 @@ class _ProgressState extends State<Progress> {
                             width: double.infinity,
                             margin: const EdgeInsets.only(top: 51.0, left: 36.0),
                             child: const Text(
-                              "👀 Look at that Bicep Growth",
+                              "👀 Look at that Muscle Growth",
                               style: TextStyle(fontSize: 17),
                             ),
                           ),
