@@ -180,7 +180,10 @@ class _BottomSliderState extends State<BottomSlider> {
 
   CarouselController controller = CarouselController();
 
-  String formatDate(String date) => new DateFormat("MMMM d").format(DateTime.parse(date));
+  String formatDate(String date) {
+    date = date.split(".jpg")[0];
+    return new DateFormat("MMMM d").format(DateTime.parse(date));
+  }
 
   void changeImg(value) {
     controller.animateToPage(value.toInt());
