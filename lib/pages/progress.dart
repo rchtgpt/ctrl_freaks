@@ -15,17 +15,13 @@ class Progress extends StatefulWidget {
 }
 
 class _ProgressState extends State<Progress> {
-  List imgs = [];
-  List dates = [];
+  late Future<List> imgs;
+  late Future<List> dates;
 
   @override
   void initState() {
-    buildListOfImageURLs().then((result){
-      setState(() => imgs.add(result));
-      });
-    buildListOfImageDates().then((result){
-      setState(() => dates.add(result));
-    });
+    imgs = buildListOfImageURLs();
+    dates = buildListOfImageDates();
   }
 
   Future<List> buildListOfImageURLs() async {
@@ -132,10 +128,9 @@ class _ProgressState extends State<Progress> {
 }
 
 class BottomSlider extends StatefulWidget {
-  final List imgs;
-  final List dates;
+  final Future<List> imgs;
+  final Future<List> dates;
   BottomSlider(this.imgs, this.dates);
-
 
   @override
   _BottomSliderState createState() => _BottomSliderState();
@@ -156,55 +151,64 @@ class _BottomSliderState extends State<BottomSlider> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(top: 10.0),
-          child: CarouselSlider(
-            options: CarouselOptions(
-                height: 300.0,
-                viewportFraction: 0.5,
-                enableInfiniteScroll: false,
-                enlargeCenterPage: true,
-                initialPage: 0
-            ),
-            carouselController: controller,
-            items: widget.imgs[0].map<Widget>((i) {
-              return Builder(
-                builder: (BuildContext context) {
-                  print("${widget.dates}+++++ $i");
-                  return Card(
-                    semanticContainer: true,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Image(
-                      image: NetworkImage(i),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14.0),
-                    ),
-                    elevation: 5,
-                  );
-                },
-              );
-            }).toList(),
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 30.0, left: 50.0, right: 50.0),
-          child: Slider(
-            activeColor: Color(0xffFEC20B),
-            inactiveColor: Color(0xffFEC20B),
-            value: _currentValue,
-            max: widget.imgs[0].length.toDouble(),
-            divisions: widget.imgs[0].length - 1,
-            label: formatDate(widget.dates[0][_currentValue.toInt()]),
-            onChanged: (double value) => changeImg(value)
-          ),
-        ),
-      ],
+    return FutureBuilder(
+      future: Future.wait([widget.imgs, widget.dates]),
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.hasData) {
+          print("snapshot data ${snapshot.data}");
+          return Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 10.0),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                      height: 300.0,
+                      viewportFraction: 0.5,
+                      enableInfiniteScroll: false,
+                      enlargeCenterPage: true,
+                      initialPage: 0
+                  ),
+                  carouselController: controller,
+                  items: snapshot.data?[0].map<Widget>((i) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        print("${widget.dates}+++++ $i");
+                        return Card(
+                          semanticContainer: true,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          child: Image(
+                            image: NetworkImage(i),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14.0),
+                          ),
+                          elevation: 5,
+                        );
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 30.0, left: 50.0, right: 50.0),
+                child: Slider(
+                    activeColor: Color(0xffFEC20B),
+                    inactiveColor: Color(0xffFEC20B),
+                    value: _currentValue,
+                    max: (snapshot.data?[0].length - 1).toDouble(),
+                    divisions: snapshot.data?[0].length - 1,
+                    label: formatDate(snapshot.data?[1][_currentValue.toInt()]),
+                    onChanged: (double value) => changeImg(value)
+                ),
+              ),
+            ],
+          );
+        } else {
+          return Text("");
+        }
+      },
     );
   }
 }
