@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
+import 'package:ctrl_freaks/main.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -131,7 +132,6 @@ class _CameraViewState extends State<CameraView> {
                             final directory = (await getApplicationDocumentsDirectory()).path;
                             ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
                             Uint8List? pngBytes = byteData?.buffer.asUint8List();
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => Test(pngBytes)));
                             File file =new File('$directory/${DateTime.now()}.png');
                             file.writeAsBytes(pngBytes as List<int>);
                             print('hi ${file.path}');
@@ -151,6 +151,9 @@ class _CameraViewState extends State<CameraView> {
                             // storing the file
                             try {
                               await referenceImageToUpload.putFile(File(file.path));
+                              const snackBar = SnackBar(content: Text("Saved image"),);
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              Navigator.pushNamed(context, MyApp.id);
                             } catch(error) {
                               print("Error uploading image to Firebase");
                             }

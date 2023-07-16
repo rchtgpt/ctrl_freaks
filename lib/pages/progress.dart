@@ -166,7 +166,7 @@ class _BottomSliderState extends State<BottomSlider> {
                 child: CarouselSlider(
                   options: CarouselOptions(
                       height: 400.0,
-                      viewportFraction: 0.7,
+                      viewportFraction: 0.6,
                       enableInfiniteScroll: false,
                       enlargeCenterPage: true,
                       initialPage: 0
