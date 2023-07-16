@@ -1,8 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:ctrl_freaks/widgets/muscleBtn.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ctrl_freaks/firebase_options.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
 import "package:flutter/material.dart";
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -88,38 +94,69 @@ class _ProgressState extends State<Progress> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 36.0),
-                  child: Row(
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {},
-                          child: Text(
-                              "📽️ Export Transformation Reel",
-                              style: TextStyle(color: Color(0xff000000)),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xffffffff),
-                            side: BorderSide(
-                              width: 2.0,
-                              color: Color(0xff000000),
+                FutureBuilder(
+                  future: Future.wait([imgs, dates]),
+                  builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 36.0),
+                            child: Row(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    print("snapshot share ${snapshot.data?[0]}");
+                                    final directory = (await getApplicationDocumentsDirectory()).path;
+
+                                    List<String> imgList = [];
+
+                                    for (int i = 0; i < snapshot.data?[0].length; i++) {
+                                      final img = snapshot.data?[0][i];
+                                      Uint8List bytes = (await NetworkAssetBundle(Uri.parse(img))
+                                          .load(img))
+                                          .buffer
+                                          .asUint8List();
+                                      File file = new File('$directory/${snapshot.data?[1][i]}.png');
+                                      await file.writeAsBytes(bytes);
+                                      imgList.add(file.path);
+                                    }
+
+                                    Share.shareFiles(imgList);
+                                  },
+                                  child: Text(
+                                    "📽️ Share Transformation",
+                                    style: TextStyle(color: Color(0xff000000)),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Color(0xffffffff),
+                                      side: BorderSide(
+                                        width: 2.0,
+                                        color: Color(0xff000000),
+                                      ),
+                                      elevation: 7.0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5.0)
+                                      )
+                                  ),
+                                ),
+                              ],
                             ),
-                            elevation: 7.0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0)
-                              )
                           ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(top: 51.0, left: 36.0),
-                  child: const Text(
-                    "👀 Look at that Bicep Growth",
-                    style: TextStyle(fontSize: 17),
-                  ),
+                          Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.only(top: 51.0, left: 36.0),
+                            child: const Text(
+                              "👀 Look at that Bicep Growth",
+                              style: TextStyle(fontSize: 17),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Text("");
+                    }
+                  }
                 ),
                 BottomSlider(imgs, dates)
               ],
