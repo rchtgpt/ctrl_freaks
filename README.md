@@ -1,6 +1,5 @@
-![ctrl_freaks](https://socialify.git.ci/rchtgpt/ctrl_freaks/image?description=1&language=1&name=1&theme=Light)
+![ctrl_freak_cover](https://github.com/rchtgpt/ctrl_freaks/assets/44428198/68ee4885-4929-489c-a8e4-c55a0d457db7)
 # Ctrl Freaks :muscle:
-
 A state-of-the-art mobile app to track your muscle transformation
 
 ## Usage
