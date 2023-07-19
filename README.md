@@ -10,6 +10,3 @@ A state-of-the-art mobile app to track your muscle transformation
 📸 Capture Progress, Witness Growth: Embrace the power of our cutting-edge Computer Vision technology to capture your post-workout pictures effortlessly. Watch as your journey unfolds visually, tracking each milestone along the way, and feel the exhilaration of seeing yourself grow stronger and fitter.
 
 ![ctrl_freaks](https://github.com/rchtgpt/ctrl_freaks/assets/44428198/9fb7d23f-c218-4fcb-8ae2-10013718e022)
-
-## DevFolio Submission
-https://devfolio.co/projects/ctrl-freaks-eae7
